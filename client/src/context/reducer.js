@@ -15,12 +15,13 @@ import {
   CREATE_JOB_SUCCESS,
   CREATE_JOB_ERROR,
   GET_JOBS_BEGIN,
-  GET_JOBS_SUCCESS
+  GET_JOBS_SUCCESS,
+  SET_EDIT_JOB,
 } from "./actions";
 
 import { initialState } from "./appContext";
 
-const reducer = (state,action) => {
+const reducer = (state, action) => {
   if (action.type === DISPLAY_ALERT) {
     return {
       ...state,
@@ -38,7 +39,6 @@ const reducer = (state,action) => {
     }
   }
  
-
   if (action.type === SETUP_USER_BEGIN) {
     return { ...state, isLoading: true }
   }
@@ -165,6 +165,20 @@ const reducer = (state,action) => {
       totalJobs: action.payload.totalJobs,
       numOfPages: action.payload.numOfPages,
     };
+  }
+  if (action.type === SET_EDIT_JOB) {
+    const job = state.jobs.find((job) => job._id === action.payload.id);
+    const {_id, position, company, jobLocation, jobType, status } = job;
+    return {
+      ...state,
+      isEditing: true,
+      editJobId: _id,
+      position,
+      company,
+      jobLocation,
+      jobType,
+      status,
+    }
   }
   throw new Error(`no such action : ${action.type}`);
 }
