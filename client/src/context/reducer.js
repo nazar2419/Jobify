@@ -1,6 +1,6 @@
-import { 
-  DISPLAY_ALERT, 
-  CLEAR_ALERT, 
+import {
+  DISPLAY_ALERT,
+  CLEAR_ALERT,
   SETUP_USER_BEGIN,
   SETUP_USER_SUCCESS,
   SETUP_USER_ERROR,
@@ -18,16 +18,17 @@ import {
   GET_JOBS_SUCCESS,
   SET_EDIT_JOB,
   DELETE_JOB_BEGIN,
+  DELETE_JOB_ERROR,
   EDIT_JOB_BEGIN,
   EDIT_JOB_SUCCESS,
   EDIT_JOB_ERROR,
   SHOW_STATS_BEGIN,
   SHOW_STATS_SUCCESS,
   CLEAR_FILTERS,
-  CHANGE_PAGE
-} from "./actions";
+  CHANGE_PAGE,
+} from './actions';
 
-import { initialState } from "./appContext";
+import { initialState } from './appContext';
 
 const reducer = (state, action) => {
   if (action.type === DISPLAY_ALERT) {
@@ -36,7 +37,7 @@ const reducer = (state, action) => {
       showAlert: true,
       alertType: 'danger',
       alertText: 'Please provide all values!',
-    }
+    };
   }
   if (action.type === CLEAR_ALERT) {
     return {
@@ -44,16 +45,16 @@ const reducer = (state, action) => {
       showAlert: false,
       alertType: '',
       alertText: '',
-    }
+    };
   }
- 
+
   if (action.type === SETUP_USER_BEGIN) {
-    return { ...state, isLoading: true }
+    return { ...state, isLoading: true };
   }
 
   if (action.type === SETUP_USER_SUCCESS) {
-    return { 
-      ...state, 
+    return {
+      ...state,
       isLoading: false,
       token: action.payload.token,
       user: action.payload.user,
@@ -61,25 +62,25 @@ const reducer = (state, action) => {
       jobLocation: action.payload.location,
       showAlert: true,
       alertType: 'success',
-      alertText: action.payload.alertText, 
-    }
+      alertText: action.payload.alertText,
+    };
   }
 
   if (action.type === SETUP_USER_ERROR) {
-    return { 
-      ...state, 
+    return {
+      ...state,
       isLoading: false,
       showAlert: true,
       alertType: 'danger',
-      alertText: action.payload.msg, 
-    }
+      alertText: action.payload.msg,
+    };
   }
 
   if (action.type === TOGGLE_SIDEBAR) {
     return {
       ...state,
       showSidebar: !state.showSidebar,
-    }
+    };
   }
   if (action.type === LOGOUT_USER) {
     return {
@@ -88,16 +89,16 @@ const reducer = (state, action) => {
       token: null,
       jobLocation: '',
       userLocation: '',
-    }
+    };
   }
 
   if (action.type === UPDATE_USER_BEGIN) {
-    return { ...state, isLoading: true }
+    return { ...state, isLoading: true };
   }
 
   if (action.type === UPDATE_USER_SUCCESS) {
-    return { 
-      ...state, 
+    return {
+      ...state,
       isLoading: false,
       token: action.payload.token,
       user: action.payload.user,
@@ -105,26 +106,26 @@ const reducer = (state, action) => {
       jobLocation: action.payload.location,
       showAlert: true,
       alertType: 'success',
-      alertText: 'User Profile Updated!', 
-    }
+      alertText: 'User Profile Updated!',
+    };
   }
 
   if (action.type === UPDATE_USER_ERROR) {
-    return { 
-      ...state, 
+    return {
+      ...state,
       isLoading: false,
       showAlert: true,
       alertType: 'danger',
-      alertText: action.payload.msg, 
-    }
+      alertText: action.payload.msg,
+    };
   }
 
   if (action.type === HANDLE_CHANGE) {
-    return { 
+    return {
       ...state,
-      page:1,
+      page: 1,
       [action.payload.name]: action.payload.value,
-    }
+    };
   }
 
   if (action.type === CLEAR_VALUES) {
@@ -136,40 +137,40 @@ const reducer = (state, action) => {
       jobLocation: state.userLocation,
       jobType: 'full-time',
       status: 'pending',
-    }
-    return { 
-      ...state, 
+    };
+    return {
+      ...state,
       ...initialState,
-    }
+    };
   }
   if (action.type === CREATE_JOB_BEGIN) {
-    return {...state, isLoading: true}
+    return { ...state, isLoading: true };
   }
   if (action.type === CREATE_JOB_SUCCESS) {
     return {
-      ...state, 
+      ...state,
       isLoading: false,
       showAlert: true,
       alertType: 'success',
       alertText: 'New Job Created!',
-    }
+    };
   }
   if (action.type === CREATE_JOB_ERROR) {
     return {
-      ...state, 
+      ...state,
       isLoading: false,
       showAlert: true,
       alertType: 'danger',
       alertText: action.payload.msg,
-    }
+    };
   }
   if (action.type === GET_JOBS_BEGIN) {
-    return { ...state, isLoading: true, showAlert: false }
+    return { ...state, isLoading: true, showAlert: false };
   }
   if (action.type === GET_JOBS_SUCCESS) {
-    return { 
-      ...state, 
-      isLoading: false, 
+    return {
+      ...state,
+      isLoading: false,
       jobs: action.payload.jobs,
       totalJobs: action.payload.totalJobs,
       numOfPages: action.payload.numOfPages,
@@ -177,7 +178,7 @@ const reducer = (state, action) => {
   }
   if (action.type === SET_EDIT_JOB) {
     const job = state.jobs.find((job) => job._id === action.payload.id);
-    const {_id, position, company, jobLocation, jobType, status } = job;
+    const { _id, position, company, jobLocation, jobType, status } = job;
     return {
       ...state,
       isEditing: true,
@@ -187,13 +188,23 @@ const reducer = (state, action) => {
       jobLocation,
       jobType,
       status,
-    }
+    };
   }
   if (action.type === DELETE_JOB_BEGIN) {
-    return { ...state, isLoading: true}
+    return { ...state, isLoading: true };
   }
+  if (action.type === DELETE_JOB_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
+    };
+  }
+
   if (action.type === EDIT_JOB_BEGIN) {
-    return { ...state, isLoading: true}
+    return { ...state, isLoading: true };
   }
   if (action.type === EDIT_JOB_SUCCESS) {
     return {
@@ -202,7 +213,7 @@ const reducer = (state, action) => {
       showAlert: true,
       alertType: 'success',
       alertText: 'Job Updated!',
-    }
+    };
   }
 
   if (action.type === EDIT_JOB_ERROR) {
@@ -212,10 +223,10 @@ const reducer = (state, action) => {
       showAlert: true,
       alertType: 'danger',
       alertText: action.payload.msg,
-    }
+    };
   }
   if (action.type === SHOW_STATS_BEGIN) {
-    return { ...state, isLoading: true, showAlert: false}
+    return { ...state, isLoading: true, showAlert: false };
   }
   if (action.type === SHOW_STATS_SUCCESS) {
     return {
@@ -223,7 +234,7 @@ const reducer = (state, action) => {
       isLoading: false,
       stats: action.payload.stats,
       monthlyApplications: action.payload.monthlyApplications,
-    }
+    };
   }
   if (action.type === CLEAR_FILTERS) {
     return {
@@ -232,13 +243,13 @@ const reducer = (state, action) => {
       searchStatus: 'all',
       searchType: 'all',
       sort: 'latest',
-    }
+    };
   }
-  
+
   if (action.type === CHANGE_PAGE) {
-    return { ...state, page: action.payload.page }
+    return { ...state, page: action.payload.page };
   }
   throw new Error(`no such action : ${action.type}`);
-}
+};
 
 export default reducer;
