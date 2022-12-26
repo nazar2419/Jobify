@@ -1,13 +1,15 @@
-import { useAppContext } from "../context/appContext";
-import { Navigate } from "react-router-dom";
+import { useAppContext } from '../context/appContext';
+import { Navigate } from 'react-router-dom';
+import Loading from '../components/Loading';
 
-const ProtectedRoute = ({children}) => {
-  const { user } = useAppContext();
+const ProtectedRoute = ({ children }) => {
+  const { user, userLoading } = useAppContext();
+
+  if (userLoading) return <Loading />;
   if (!user) {
-    return <Navigate to='/landing'/>
+    return <Navigate to="/landing" />;
   }
-  return children
-  
-}
+  return children;
+};
 
-export default ProtectedRoute
+export default ProtectedRoute;
